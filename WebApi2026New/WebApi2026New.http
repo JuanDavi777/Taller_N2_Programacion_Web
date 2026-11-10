@@ -1,0 +1,37 @@
+@host = https://localhost:7186
+
+### 1. Registro (público)
+POST {{host}}/api/Auth/registro
+Content-Type: application/json
+
+{
+  "nombre": "Ana",
+  "apellido": "Pérez",
+  "edad": 21,
+  "correo": "ana@upc.edu.co",
+  "password": "ClaveSegura2026*"
+}
+
+### 2. Login (público)
+# @name login
+POST {{host}}/api/Auth/login
+Content-Type: application/json
+
+{
+  "correo": "ana@upc.edu.co",
+  "password": "ClaveSegura2026*"
+}
+
+###
+@token = {{login.response.body.$.token}}
+
+### 3. Sin token -> 401
+GET {{host}}/api/Personas
+
+### 4. Con token -> 200
+GET {{host}}/api/Personas
+Authorization: Bearer {{token}}
+
+### 5. ¿Qué trae mi token?
+GET {{host}}/api/Auth/yo
+Authorization: Bearer {{token}}
